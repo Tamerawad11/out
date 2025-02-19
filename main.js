@@ -1,12 +1,13 @@
 // تحميل البيانات من LocalStorage
 let inventory = JSON.parse(localStorage.getItem("inventory")) || [];
 let logs = JSON.parse(localStorage.getItem("logs")) || [];
-let admin = localStorage.getItem("admin") || null; // تحميل اسم المسؤول
+let admin = localStorage.getItem("admin") || "مستخدم مجهول"; // تحميل اسم المسؤول مع قيمة افتراضية
 
 // حفظ البيانات في LocalStorage
 function saveData() {
     localStorage.setItem("inventory", JSON.stringify(inventory));
     localStorage.setItem("logs", JSON.stringify(logs));
+    localStorage.setItem("admin", admin); // ضمان حفظ اسم المسؤول
 }
 
 // ✅ تسجيل دخول المسؤول
@@ -14,11 +15,17 @@ function loginAdmin() {
     let adminName = document.getElementById("adminName").value.trim();
     if (adminName) {
         localStorage.setItem("admin", adminName);
+        admin = adminName; // تحديث المتغير العام
         window.location.href = "home.html"; // الانتقال للصفحة الرئيسية
     }
 }
 
-
+// ✅ التأكد من تسجيل دخول المسؤول
+function checkAdmin() {
+    if (!admin || admin === "مستخدم مجهول") {
+        window.location.href = "login.html"; // إعادة التوجيه لصفحة تسجيل الدخول
+    }
+}
 
 // ✅ تحديث القوائم المنسدلة للقطع
 function updateDropdowns() {
@@ -64,38 +71,6 @@ function addPart() {
 
     saveData();
     alert(`✅ تم إضافة ${quantity} من القطعة "${name}" بواسطة ${requester} (المسؤول: ${admin}).`);
-    updateDropdowns();
-}
-
-// ✅ إضافة كميات إلى القطع الموجودة
-function addToExisting() {
-    checkAdmin();
-    let name = document.getElementById("existingParts").value;
-    let quantity = parseInt(document.getElementById("addQuantity").value);
-    let requester = document.getElementById("requesterName").value.trim();
-
-    if (!name || isNaN(quantity) || quantity <= 0 || !requester) {
-        alert("⚠️ الرجاء إدخال جميع البيانات.");
-        return;
-    }
-
-    let part = inventory.find(p => p.name === name);
-    if (part) {
-        part.quantity += quantity;
-
-        logs.push({
-            date: new Date().toLocaleString(),
-            action: " إضافة كمية موجودة",
-            name,
-            quantity,
-            requester,
-            admin
-        });
-
-        saveData();
-        alert(`✅ تمت إضافة ${quantity} للقطعة "${name}" بواسطة ${requester} (المسؤول: ${admin}).`);
-    }
-
     updateDropdowns();
 }
 
@@ -186,7 +161,7 @@ function renderLog() {
 
 // ✅ تحديث القوائم عند تحميل الصفحة
 document.addEventListener("DOMContentLoaded", () => {
-    checkAdmin();
+    admin = localStorage.getItem("admin") || "مستخدم مجهول"; 
     updateDropdowns();
     renderLog();
 });
