@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بحث عن قطعة</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body onload="checkAdmin()">
+    <h2>بحث عن قطعة</h2>
+    <input type="text" id="searchInput" placeholder="أدخل اسم القطعة">
+    <button onclick="searchPart()">بحث</button>
+
+    <h3>نتائج البحث:</h3>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>اسم القطعة</th>
+                <th>الكمية</th>
+                <th>آخر طلب</th>
+            </tr>
+        </thead>
+        <tbody id="searchResults"></tbody>
+    </table>
+
+
+    <script src="main.js"></script>
+</body>
+<h4>صاحب الموقع تامر عوض@</h4>
+</html>

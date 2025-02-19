@@ -1,0 +1,8 @@
+// ✅ التأكد من تسجيل الدخول
+function checkAdmin() {
+    admin = localStorage.getItem("admin");
+    if (!admin) {
+        alert("⚠️ يجب تسجيل الدخول أولاً!");
+        window.location.href = "admin_login.html";
+    }
+}
